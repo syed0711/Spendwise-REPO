@@ -1,0 +1,24 @@
+{
+  "name": "spendwise-mvp-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Root for SpendWise MVP Backend and Frontend",
+  "scripts": {
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm start",
+    "dev:backend": "cd backend && npm start",
+    "dev:frontend": "cd frontend && npm start",
+    "build:frontend": "cd frontend && npm run build",
+    "lint:backend": "echo \"No linter configured for backend yet. cd backend && npm run <lint_script>\"",
+    "lint:frontend": "cd frontend && npm run lint"
+  },
+  "author": "AI Code Generator",
+  "license": "ISC",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ]
+}
