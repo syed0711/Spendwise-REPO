@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
+import {
+  Button, CircularProgress, Alert, Box, Typography, Paper,
+  TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Link
+} from '@mui/material';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'; // Using outlined version
 
 function DataView() {
   const [transactions, setTransactions] = useState([]);
@@ -10,7 +15,7 @@ function DataView() {
   useEffect(() => {
     const fetchTransactions = async () => {
       setLoading(true);
-      setError(null); // Reset error state on new fetch
+      setError(null);
       try {
         const response = await fetch('http://localhost:4000/transactions');
         if (!response.ok) {
@@ -20,11 +25,9 @@ function DataView() {
         const data = await response.json();
         setTransactions(data);
         if (data && data.length > 0) {
-          // Ensure consistent header order if possible, or just use keys from first object
-          // For more complex scenarios, you might want to predefine headers or derive them more robustly
           setHeaders(Object.keys(data[0]));
         } else {
-          setHeaders([]); // No headers if no data
+          setHeaders([]);
         }
       } catch (e) {
         setError(e.message);
@@ -38,54 +41,73 @@ function DataView() {
   }, []);
 
   if (loading) {
-    return <p>Loading transactions...</p>;
+    return <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}><CircularProgress /></Box>;
   }
 
   if (error) {
     return (
-      <div>
-        <p>Error fetching transactions: {error}</p>
-        <Link to="/">
-          <button>Go to Upload</button>
-        </Link>
-      </div>
+      <Box sx={{ p: 2 }}>
+        <Alert severity="error" sx={{ my: 2 }}>
+          Error fetching transactions: {error} <br />
+          Please ensure the backend server is running and accessible.
+        </Alert>
+        <Button variant="outlined" component={RouterLink} to="/">Go to Upload Page</Button>
+      </Box>
     );
   }
 
   return (
-    <div>
-      <h2>Transaction Data</h2>
-      <Link to="/dashboard">
-        <button style={{ marginRight: '10px' }}>View Dashboard</button>
-      </Link>
-      <Link to="/">
-        <button>Upload New File</button>
-      </Link>
+    <Box sx={{ mt: 2, p: {xs: 1, sm: 2} }}> {/* Added responsive padding */}
+      <Box sx={{ display: 'flex', flexDirection: {xs: 'column', sm: 'row'}, justifyContent: 'space-between', alignItems: 'center', mb: 3, gap: 1 }}>
+        <Typography variant="h4" component="h1" gutterBottom sx={{ textAlign: {xs: 'center', sm: 'left'} }}>
+          Transaction Data
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 1}}>
+            <Button variant="outlined" component={RouterLink} to="/">Upload New File</Button>
+            <Button variant="contained" component={RouterLink} to="/dashboard">View Dashboard</Button>
+        </Box>
+      </Box>
       {transactions.length === 0 ? (
-        <p style={{ marginTop: '20px' }}>No transactions found. <Link to="/">Upload a CSV file</Link> on the Home page.</p>
+        <Paper sx={{ p: {xs: 2, sm: 4}, textAlign: 'center', mt: 4, backgroundColor: (theme) => theme.palette.grey[50] }}>
+          <InfoOutlinedIcon sx={{ fontSize: 48, color: 'text.secondary', mb: 2 }} />
+          <Typography variant="h5" gutterBottom>No Transactions Found</Typography>
+          <Typography color="text.secondary" paragraph>
+            It looks like there's no data to display.
+            Please <Link component={RouterLink} to="/">upload a CSV file</Link> on the Home page.
+          </Typography>
+          <Button variant="contained" component={RouterLink} to="/" sx={{ mt: 2 }}>
+            Upload File
+          </Button>
+        </Paper>
       ) : (
-        <div className="scrollable-table">
-          <table>
-            <thead>
-              <tr>
-                {headers.map(header => <th key={header}>{header}</th>)}
-              </tr>
-            </thead>
-            <tbody>
+        <TableContainer component={Paper} sx={{ maxHeight: '70vh' }}> {/* Added maxHeight for scrollability within TableContainer */}
+          <Table stickyHeader sx={{ minWidth: 650 }} aria-label="transactions table">
+            <TableHead>
+              <TableRow sx={{ '& th': { backgroundColor: (theme) => theme.palette.grey[200], fontWeight: 'bold' } }}>
+                {headers.map(header => <TableCell key={header}>{header}</TableCell>)}
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {transactions.map((transaction, index) => (
-                <tr key={index}>
+                <TableRow
+                  key={index}
+                  sx={{
+                    '&:nth-of-type(odd)': { backgroundColor: (theme) => theme.palette.action.hover },
+                    '&:last-child td, &:last-child th': { border: 0 }
+                  }}
+                >
                   {headers.map(header => (
-                    <td key={`${header}-${index}`}>
+                    <TableCell key={`${header}-${index}`}>
                       {typeof transaction[header] === 'object' ? JSON.stringify(transaction[header]) : String(transaction[header])}
-                    </td>
+                    </TableCell>
                   ))}
-                </tr>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
-    </div>
+    </Box>
   );
 }
 

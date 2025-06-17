@@ -1,63 +1,20 @@
-/* frontend/src/App.css (can be basic) */
-.App {
-  text-align: center;
-}
-nav ul {
-  list-style-type: none;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  background-color: #f0f0f0;
-  padding: 10px;
-}
-nav ul li {
-  margin: 0 15px;
-}
-nav ul li a {
-  text-decoration: none;
-  color: #333;
-  font-weight: bold;
-}
-nav ul li a.active {
-  color: #007bff;
-}
-.container {
-  padding: 20px;
-}
-table {
-  width: 80%;
-  margin: 20px auto;
-  border-collapse: collapse;
-}
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-th {
-  background-color: #f2f2f2;
-}
-.scrollable-table {
-  max-height: 400px;
-  overflow-y: auto;
-  margin-top: 20px;
-}
-button, input[type="file"] {
-  margin: 10px;
-  padding: 10px;
-}
-.message-area {
-  margin-top: 15px;
-  padding: 10px;
-  border-radius: 5px;
-}
-.message-area.success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-.message-area.error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
+/* frontend/src/App.css */
+/* Component-specific styles are now primarily handled via MUI's sx prop or the styled() utility. */
+/* Global layout aspects are managed by MUI components like Container, AppBar, Grid, Box. */
+/* This file is intentionally left mostly empty. */
+
+/*
+  The .App class with text-align: center is no longer needed as content alignment
+  should be handled by specific MUI layout components (e.g., Box, Container with textAlign prop).
+*/
+
+/*
+  All navigation (nav, ul, li, a), container, table, button, and message area styles
+  have been superseded by their respective MUI component implementations and styling.
+*/
+
+/*
+  If there are any truly global styles that *cannot* be achieved through MUI's
+  theming or component styling, they could theoretically reside here, but it's
+  generally preferred to use MUI's styling solutions for consistency.
+*/
